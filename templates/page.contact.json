@@ -77,7 +77,7 @@
           "type": "contact",
           "settings": {
             "heading": "Information",
-            "text": "info@yourstore.com",
+            "text": "info@frankiesflags.com",
             "link": "mailto:info@yourstore.com"
           }
         },
@@ -85,12 +85,13 @@
           "type": "contact",
           "settings": {
             "heading": "Customer service",
-            "text": "shop@yourstore.com",
+            "text": "info@frankiesflags.com",
             "link": "mailto:shop@yourstore.com"
           }
         },
         "contact-2": {
           "type": "contact",
+          "disabled": true,
           "settings": {
             "heading": "Sales",
             "text": "sales@yourstore.com",
@@ -99,6 +100,7 @@
         },
         "contact-3": {
           "type": "contact",
+          "disabled": true,
           "settings": {
             "heading": "Press",
             "text": "press@yourstore.com",
@@ -156,7 +158,7 @@
         "map-1": {
           "type": "text",
           "settings": {
-            "text": "<p>Toronto, Canada</p>",
+            "text": "<p>Miami, USA</p>",
             "text_size": "typeset",
             "secondary_color": false,
             "enable_highlight": false,
@@ -183,7 +185,7 @@
           "type": "button",
           "settings": {
             "button_label": "Get directions",
-            "button_link": "https://www.google.com/maps/place/Peter+Bangs+Vej+15,+7600+Struer,+Denmark/@56.4843068,8.6032672,17z/data=!3m1!4b1!4m5!3m4!1s0x464a2dcc4bfc3e09:0x3222e80e09b18b8a!8m2!3d56.484304!4d8.605328",
+            "button_link": "https://www.google.com/maps/place/Miami,+FL+33197,+USA/@25.5961,-80.3599,17z/data=!4m6!3m5!1s0x88d9c369ca662b19:0xf9ba24689b60b6c0!8m2!3d25.5961!4d-80.35995!16s%2Fm%2F07nr3nd?hl=en&entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D",
             "button_size": "small",
             "button_style_secondary": false
           }
