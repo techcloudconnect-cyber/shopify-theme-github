@@ -1,0 +1,280 @@
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --gradient-background: {% if section.settings.gradient_background != blank %}{{ section.settings.gradient_background }}{% else %}{{ section.settings.colors_background }}{% endif %};
+    --color-background: {{ section.settings.colors_background.red }}, {{ section.settings.colors_background.green }}, {{ section.settings.colors_background.blue }};
+    --color-foreground: {{ section.settings.colors_text.red }}, {{ section.settings.colors_text.green }}, {{ section.settings.colors_text.blue }};
+    --color-link: var(--color-foreground);
+    --color-border: var(--color-foreground);
+    --color-heading: var(--color-foreground);
+    --color-button-background: {{ section.settings.colors_button_background.red }}, {{ section.settings.colors_button_background.green }}, {{ section.settings.colors_button_background.blue }};
+    --color-button-text: {{ section.settings.colors_button_label.red }}, {{ section.settings.colors_button_label.green }}, {{ section.settings.colors_button_label.blue }};
+    --color-button-border: var(--color-button-background);
+    --color-shadow: var(--color-foreground);
+  }
+{% endstyle %}
+
+{% stylesheet %}
+  /*.image-text-button-wrapper {
+      edited  max-width: 190rem;
+      padding: 0 5rem;
+      margin: auto;
+      margin-left: 2rem;
+      margin-right: 2rem; 
+  }*/
+    .image-text-button {
+      background: var(--gradient-background);
+      background-color: rgb(var(--color-background));
+      padding-top: var(--section-padding-top) !important;
+      padding-bottom: var(--section-padding-bottom) !important;
+    }
+
+    .image-text-button__container {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+       background-color: white;
+      border-radius: 35px;
+      padding: 2rem;
+    }
+
+    .image-text-button__image-wrapper {
+      flex-shrink: 0;
+      width:120px;
+    }
+
+    .image-text-button__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      vertical-align: middle;
+  }
+
+    .image-text-button__content {
+      flex: 1;
+    }
+
+    .image-text-button__heading {
+      color: rgb(var(--color-heading));
+    }
+
+    .image-text-button__text {
+      color: rgb(var(--color-foreground));
+    }
+
+    .image-text-button__button-wrapper {
+      flex-shrink: 0;
+      border:solid 3px #3A35B2;
+      border-radius: 35px;;
+    }
+
+    .image-text-button__button {
+      background: rgb(var(--color-button-background)) !important;
+      color: rgb(var(--color-button-text)) !important;
+      border-color: rgb(var(--color-button-border)) !important;
+      transition: all 0.3s ease;
+    }
+
+    .image-text-button__button:hover {
+      opacity: 0.8;
+      color: rgb(var(--color-button-text)) !important;
+    }
+
+    .image-text-button__disclaimer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      color: rgb(var(--color-foreground));
+      opacity: .5;
+      font-size: 12px;
+      letter-spacing: 0;
+      line-height:normal;
+    }
+
+    /* Mobile Styles */
+    @media screen and (max-width: 768px) {
+    .image-text-button {
+         padding-top: calc(var(--section-padding-top) * 0.75) !important;
+         padding-bottom: calc(var(--section-padding-bottom) * 0.75) !important;
+    }
+      .image-text-button-wrapper{
+       padding:0 1.5rem;
+       margin:0 auto;
+      }
+      .image-text-button__container {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .image-text-button__content {
+        text-align: center;
+      }
+
+      .image-text-button__disclaimer {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .image-text-button__container {
+        gap: 1rem;
+      }
+    }
+{% endstylesheet %}
+
+<section class="image-text-button">
+  <div class="page-width image-text-button-wrapper">
+    <div class="image-text-button__container">
+      {% if section.settings.image != blank %}
+        <div class="image-text-button__image-wrapper">
+          <img
+            src="{{ section.settings.image | image_url }}"
+            alt="{{ section.settings.image.alt | default: section.settings.heading }}"
+            class="image-text-button__image"
+            loading="lazy"
+            width="auto"
+            height="auto"
+          >
+        </div>
+      {% endif %}
+
+      <div class="image-text-button__content">
+        {% if section.settings.heading != blank %}
+          <span class="image-text-button__heading h3">{{ section.settings.heading }}</span>
+        {% endif %}
+
+        {% if section.settings.text != blank %}
+          <p class="image-text-button__text">{{ section.settings.text }}</p>
+        {% endif %}
+      </div>
+
+      {% if section.settings.button_label != blank and section.settings.button_url != blank %}
+        <div class="image-text-button__button-wrapper">
+          <a href="{{ section.settings.button_url }}" class="button button--middle image-text-button__button">
+            {{ section.settings.button_label }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if section.settings.disclaimer_text != blank %}
+      <div class="image-text-button__disclaimer">
+        {{ section.settings.disclaimer_text }}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image Text Button",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Take our quick quiz to find your personalized care plan"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Get started with personalized recommendations"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Start Your Visit"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "textarea",
+      "id": "disclaimer_text",
+      "label": "Disclaimer text",
+      "default": "Our treatments are provided by licensed healthcare professionals using trusted, evidence-based medications and lab testing. We are not affiliated with any pharmaceutical manufacturer or trademark holder. Medications may be recommended to support weight, wellness, and longevity goals but are only prescribed after a doctor's review. Treatment plans, results, and availability vary by state and individual health needs. Clinical care is guided by medical judgment, not brand partnerships. Please read full safety information and possible side effects before starting your program."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "colors_background",
+      "label": "Background color",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color_background",
+      "id": "gradient_background",
+      "label": "Gradient background"
+    },
+    {
+      "type": "color",
+      "id": "colors_text",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "colors_button_background",
+      "label": "Button background color",
+      "default": "#1a237e"
+    },
+    {
+      "type": "color",
+      "id": "colors_button_label",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Text Button"
+    }
+  ]
+}
+{% endschema %}

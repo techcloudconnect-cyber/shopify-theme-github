@@ -1,0 +1,352 @@
+{% style %}
+  #shopify-section-{{ section.id }} {
+      --color-link: var(--color-foreground);
+     --color-border: var(--color-foreground);
+     --color-heading: var(--color-foreground);
+     --color-button-background: {{ section.settings.colors_button_background.red }}, {{ section.settings.colors_button_background.green }}, {{ section.settings.colors_button_background.blue }};
+     --color-button-text: {{ section.settings.colors_button_label.red }}, {{ section.settings.colors_button_label.green }}, {{ section.settings.colors_button_label.blue }};
+     --color-button-border: var(--color-button-background);
+    }
+    #shopify-section-{{ section.id }} .review-text-columns-wrapper{
+       background-color:{{section.settings.section_bg}};
+    }
+     #shopify-section-{{ section.id }} .review-text-columns-section  {
+       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+       padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+       margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0}}px;
+       margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+     }
+     #shopify-section-{{ section.id }} .review-column {
+       background-color:{{section.settings.review_bg}};
+       color:{{section.settings.review_text}};
+     }
+     .rc-swiper-slide.swiper-slide {
+       height: auto;
+       display: flex;
+       flex-direction: column;
+     }
+     @media screen and (min-width: 750px) {
+     #shopify-section-{{ section.id }} .review-text-columns-section  {
+       padding-top: {{ section.settings.padding_top }}px;
+       padding-bottom: {{ section.settings.padding_bottom }}px;
+       margin-top: {{ section.settings.margin_top }}px;
+       margin-bottom: {{ section.settings.margin_bottom }}px;
+     }
+     }
+     .rtc-swiper-pagination span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+       background: #8B77C4 !important;
+       width: 2rem !important;
+       border-radius: 20px;
+       transition: all 0.5s ease;
+     }
+       #shopify-section-{{ section.id }} .review-text-wrapper{
+       display: flex;
+       padding:2.5rem;
+       flex-direction: column;
+       align-items:flex-start;
+       gap:1.5rem;
+       justify-content: center;
+     }
+     #shopify-section-{{ section.id }} .rtc-swiper-pagination .swiper-pagination-bullet{
+     Width:1rem;
+     height:1rem;
+     }
+
+     /* #shopify-section-{{ section.id }} .section-heading-wrapper {
+     {% if section.settings.section_image %}
+       justify-content:space-between;
+     {% endif %}
+     } */
+{% endstyle %}
+{{ 'section-review-column.css' | asset_url | stylesheet_tag: preload: true }}
+
+<div id="{{ section.id }}" class="review-text-columns-wrapper">
+  <div
+    id="{{ section.id }}"
+    class="review-text-columns-section {% if section.settings.enable_pagewidth %}page-width {% else %}review-text-columns-section-padding {% endif %} review-text-columns-container"
+  >
+    <div class="page-width section-heading-wrapper">
+      {% if section.settings.section_image %}
+        {{ section.settings.section_image | image_url: width: 500 | image_tag: class: 'section-image' -}}
+      {% endif %}
+      {% if section.settings.section_title != blank %}
+        <h2 class="h1 section-title cus-section-title">{{ section.settings.section_title }}</h2>
+      {% endif %}
+      {% if section.settings.sub_title %}
+        <span class="typeset2">{{ section.settings.sub_title }}</span>
+      {% endif %}
+    </div>
+
+    <div class="rc-swiper swiper review-text-columns-swiper">
+      <div class="rc-swiper-wrapper swiper-wrapper">
+        {% for block in section.blocks %}
+          <div class="rc-swiper-slide swiper-slide ">
+            <div class="review-column">
+              <div class="review-text-wrapper typeset">
+                {% if block.settings['block-review-icon'] %}
+                  <div class="review-block-icon">
+                    {{ block.settings['block-review-icon'] | image_url: width: 1500 | image_tag }}
+                  </div>
+                {% endif %}
+                {% comment %}
+                  {% if block.settings['arthur-review-icon'] %}
+                    <div class="arthur-rating">
+                      {{ block.settings['arthur-review-icon'] | image_url: width: 1500 | image_tag }}
+                    </div>
+                  {% endif %}
+                {% endcomment %}
+                {% if block.settings.title != blank %}
+                  <div class="review-head">
+                    <span>
+                      <p>{{ block.settings.title | truncate: 40, '...' }}</p>
+                    </span>
+                  </div>
+                {% endif %}
+                <div class="review-text">
+                  {{ block.settings.text | truncate: 290, '...' }}
+                </div>
+                {% if block.settings.arthur != blank %}
+                  <div class="review-arthur">
+                    <div class="author-wrapper">
+                      <div class="author-name typeset2">{{ block.settings.arthur }}</div>
+                      <div class="author-loc">{{ block.settings['arthur-rating-text'] }}</div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Swiper pagination -->
+    <div class="rtc-swiper-pagination swiper-pagination"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var swiper = new Swiper('.review-text-columns-swiper', {
+      watchSlidesProgress: true,
+      spaceBetween: 15,
+      speed: 1200,
+
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: true,
+      },
+
+      breakpoints: {
+        0: {
+          slidesPerView: 1.2,
+          centeredSlides: true,
+          centeredSlidesBounds: true,
+          loop: true,
+        },
+        749: {
+          slidesPerView: 2,
+          centeredSlides: false,
+          loop: true,
+        },
+        990: {
+          slidesPerView: 3,
+        },
+        1040: {
+          slidesPerView: 4,
+        },
+      },
+
+      pagination: {
+        el: '.rtc-swiper-pagination',
+        clickable: true,
+      },
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Review Text Columns",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_pagewidth",
+      "label": "Enable Page Width",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_title",
+      "label": "Section Title"
+    },
+    {
+      "type": "text",
+      "id": "sub_title",
+      "label": "Text Under Heading"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section Background"
+    },
+    {
+      "type": "color",
+      "id": "review_bg",
+      "label": "Column Background",
+      "default": "#d3d3d3"
+    },
+    {
+      "type": "color",
+      "id": "review_text",
+      "label": "Text Color",
+      "default": "#000"
+    },
+    {
+      "type": "header",
+      "content": "Navigation Buttons"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_color",
+      "label": "Button Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "nav_button_bg",
+      "label": "Button Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "nav_button_size",
+      "min": 30,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Button Size",
+      "default": 40
+    },
+    {
+      "type": "image_picker",
+      "id": "section_image",
+      "label": "Image above Heading"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.colors.header.content"
+    },
+    {
+      "type": "color",
+      "id": "colors_button_label",
+      "label": "t:sections.all.colors.colors_button_label.label",
+      "default": "#1a1b18"
+    },
+    {
+      "type": "color",
+      "id": "colors_button_background",
+      "label": "t:sections.all.colors.colors_button_background.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "colors_text",
+      "label": "t:sections.all.colors.colors_text.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_column",
+      "name": "Text Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "block-review-icon",
+          "label": "Section Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Column Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>This is a review or testimonial text block. Add content from the customizer.</p>"
+        },
+        {
+          "type": "text",
+          "id": "arthur",
+          "label": "Arthur"
+        },
+        {
+          "type": "text",
+          "id": "arthur-rating-text",
+          "label": "Authur Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Review Text Columns",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "text_column"
+        },
+        {
+          "type": "text_column"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

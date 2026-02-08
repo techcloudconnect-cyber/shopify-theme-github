@@ -1,0 +1,221 @@
+{% style %}
+
+.video-banner-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.video-banner-wrapper {
+  position: relative;
+}
+
+.video-banner-media {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#shopify-section-{{ section.id }} .video-banner-content {
+  position: absolute;
+  bottom: 30%;
+  left: 5%;
+  transform: translateY(-30%);
+  max-width: 45rem;
+  z-index: 2;
+  color:{{section.settings.text_color }};
+}
+
+.video-banner-overlay {
+  position: relative;
+}
+
+.video-banner-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90px;
+  height: 90px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  border: none;
+  cursor: pointer;
+}
+
+.video-banner-play-button::before {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 24px solid white;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+}
+
+.video-banner-video {
+  width: 100%;
+  height: auto;
+}
+
+
+  @media screen and (max-width: 768px) {
+    .video-banner-media{
+      height:300px;
+      object-fit:cover;
+    }
+  }
+{% endstyle %}
+
+
+<section class="video-banner-section">
+  <div class="video-banner-wrapper">
+    {% if section.settings.image and section.settings.video %}
+      <!-- Image with play button -->
+      <div id="video-banner-placeholder" class="video-banner-overlay">
+        <img
+          src="{{ section.settings.image | image_url: width: 1600 }}"
+          alt="Video Thumbnail"
+          class="video-banner-media"
+          loading="lazy"
+        >
+
+        <div class="h1 video-banner-content">
+          {{ section.settings.text }}
+        </div>
+
+        <!-- Play Button -->
+        <button id="fc-play-btn" class="video-banner-play-button" aria-label="Play Video"></button>
+      </div>
+
+      <!-- Video Player -->
+      <div id="video-banner-player" style="display: none;">
+        <video
+          class="video-banner-video"
+          controls
+          autoplay
+          playsinline
+          muted
+        >
+          <source src="{{ section.settings.video.sources[0].url }}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        {% comment %} edited <div class="video-banner-content">
+          {{ section.settings.text }}
+        </div> {% endcomment %}
+      </div>
+
+      <!-- JS -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          var playButton = document.getElementById('fc-play-btn');
+          var placeholder = document.getElementById('video-banner-placeholder');
+          var player = document.getElementById('video-banner-player');
+
+          if (playButton && placeholder && player) {
+            playButton.addEventListener('click', function (e) {
+              e.preventDefault();
+              placeholder.style.display = 'none';
+              player.style.display = 'block';
+
+              var video = player.querySelector('video');
+              if (video) {
+                video.play();
+              }
+            });
+          }
+        });
+      </script>
+
+    {% elsif section.settings.video %}
+      <!-- Only video -->
+      <div class="video-banner-player">
+        {{ section.settings.video | video_tag: autoplay: false, controls: true, class: 'video-banner-video' }}
+        <div class="video-banner-content">
+          {{ section.settings.text }}
+        </div>
+      </div>
+
+    {% elsif section.settings.image %}
+      <!-- Only image -->
+      <div class="video-banner-overlay">
+        <img
+          src="{{ section.settings.image | image_url: width: 1600 }}"
+          alt="Banner Image"
+          class="video-banner-media"
+          loading="lazy"
+        >
+        <div class="h1 video-banner-content">
+          {{ section.settings.text }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Video Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Banner Video"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Overlay Text",
+      "default": "Learn Weekly Care Made Simple"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.colors.header.content"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.header.content"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "t:sections.all.padding.padding_top.unit",
+      "label": "t:sections.all.padding.padding_top.label",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "t:sections.all.padding.padding_bottom.unit",
+      "label": "t:sections.all.padding.padding_bottom.label",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Banner",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

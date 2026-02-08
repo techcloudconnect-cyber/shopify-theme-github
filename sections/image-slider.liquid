@@ -1,0 +1,147 @@
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+
+<style>
+  .image-slider-section {
+    padding: 40px 0;
+    background: {{ section.settings.bg_color }};
+  }
+
+  .image-slide {
+    text-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .image-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  .image-slide.swiper-slide-active img {
+    transform: scale(1.05);
+  }
+
+  /* Hide dots (pagination) */
+  .swiper-pagination {
+    display: none !important;
+  }
+
+  /* Adjust navigation arrows */
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: #000;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .swiper-button-prev:hover,
+  .swiper-button-next:hover {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+
+  /* Optional slide fade animation */
+  .swiper-fade .swiper-slide {
+    opacity: 0 !important;
+    transition: opacity 0.5s ease;
+  }
+
+  .swiper-fade .swiper-slide-active {
+    opacity: 1 !important;
+  }
+  .title_for_slider{
+  margin-block: 2rem;
+  }
+</style>
+
+<div class="image-slider-section page-width">
+  <div class="center title_for_slider">
+    <h2 class="h1">{{ section.settings.title }}</h2>
+  </div>
+  <div class="swiper myImageSlider">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide image-slide">
+          {% if block.settings.image != blank %}
+            <img src="{{ block.settings.image | img_url: 'master' }}" alt="Slide Image" loading="lazy">
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Navigation -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new Swiper('.myImageSlider', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      loop: true,
+      speed: 800, // Animation speed (ms)
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+      effect: 'slide', // Change to 'fade' for crossfade animation
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        750: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 4,
+        },
+      },
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Auto Image Slider",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Our Result"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image_slide",
+      "name": "Image Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Slide image"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Auto Image Slider",
+      "category": "Media"
+    }
+  ]
+}
+{% endschema %}

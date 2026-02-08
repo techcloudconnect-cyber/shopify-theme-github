@@ -1,0 +1,387 @@
+{% style %}
+/* 
+    #shopify-section-{{ section.id }} .its-slider-section:before {
+      content:"";
+      position:absolute;
+      background-image:url('https://cdn.shopify.com/s/files/1/0627/0572/9595/files/its_bg.png?v=1759993314');
+      background-size:100%;
+      background-repeat:no-repeat;
+      width:100%;
+      height:20rem;
+      left:0;
+      top:-25%;
+      z-index:0;
+
+    } */
+
+    #shopify-section-{{ section.id }} .its-slider-main-wrapper{
+    background-color: {{ section.settings.its_bg }};
+    }
+    #shopify-section-{{ section.id }} .its-slider-section {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+        position:relative;
+      }
+
+     .its-slide-inner {
+       display: flex;
+       flex-direction: row;
+       justify-content: space-between;
+       align-items: stretch;
+       gap: 2rem;
+       /* max-width: 120rem; edited */
+       margin: 0 auto;
+       background:white;
+       border-radius:50px;
+       position:relative;
+     }
+
+     .its-left,
+     .its-right {
+       flex: 1;
+       display: flex;
+       flex-direction: column;
+       justify-content: center;
+     }
+
+     .its-left {
+       padding: 4rem 6rem;
+       position: relative;
+     }
+
+     .its-icon {
+       width: 50px;
+       height: auto;
+       margin-bottom: 20px;
+     }
+
+     .its-pagination span.swiper-pagination-bullet.swiper-pagination-bullet-active{
+      background-color:#B3B4FF;
+     }
+
+     .its-text {
+       margin-bottom: 15px;
+     }
+     .its-text .h1{
+      display:block;
+      text-align:center;
+      margin-bottom:4rem;
+     }
+  /*
+     .its-name {
+       font-weight: 600;
+       color: #444;
+     } */
+
+     .its-right {
+       overflow: hidden;
+     }
+
+     .its-image {
+       width: 100%;
+       height: 100%;
+       object-fit: cover;
+       display: block;
+     }
+
+     .its-prev,
+     .its-next {
+       position: absolute;
+       bottom: 30px;
+       width: 20px;
+       height: 20px;
+       padding:1rem;
+       background-color:rgba(255, 255, 255, 0.7);
+       border:solid 1px #000000;
+       border-radius: 50%;
+       z-index: 2;
+       cursor: pointer;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+     }
+
+     /* Swiper adds these pseudo-elements automatically */
+     .its-prev::after,
+     .its-next::after {
+       color: #000;
+     }
+
+     /* OPTIONAL: override Swiper default icons with arrows */
+     .its-prev::after {
+       content: none;
+     }
+
+     .its-next::after {
+       content: none;
+     }
+
+     .its-prev {
+       left: 30px;
+       top:90%;
+     }
+
+     .its-next {
+       right: 30px;
+       top:90%;
+     }
+
+.image-divider-section {
+  margin-top: var(--vertical-offset);
+  position: relative;
+  z-index: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.image-divider__image-wrapper {
+  margin-top:4rem;
+  line-height: 0;
+  position: relative;
+}
+
+.image-divider__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+
+     @media screen and (max-width: 768px) {
+
+      .image-divider__image-wrapper {
+        margin-top:1rem;
+      }
+     .its-slide-inner {
+        flex-direction: column-reverse;
+        gap:1rem;
+        border-radius:20px;
+       }
+       .its-left{
+        padding:2rem;
+       }
+     }
+{% endstyle %}
+
+
+<div
+  class="image-divider-section"
+  style="--vertical-offset: {{ vertical_offset }}%;"
+ >
+  <div class="image-divider__image-wrapper {% if section.settings.full_width == false %} page-width{% endif %}">
+   {% comment %} <img src="https://cdn.shopify.com/s/files/1/0627/0572/9595/files/its_bg.png?v=1759993314" width="" height="" class="floating-fish-animation" alt="Fish animation">
+    <img src="https://cdn.shopify.com/s/files/1/0710/4125/3513/files/71d7229096a9f4c6da2c341519f8eb931dfa03e1.gif?v=1757413132" width="" height="" class="floating-fish-animation-reverse" alt="Fish animation">
+     <svg class="overlay-shape" preserveaspectratio="none" viewBox="0 0 1419 588" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <mask id="mask0_478_3093" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1419" height="588">
+      <rect width="1419" height="588" fill="#D9D9D9"/>
+      </mask>
+      <g mask="url(#mask0_478_3093)">
+      <path d="M41.7422 424.721C119.742 416.388 286.542 407.721 329.742 439.721C372.942 471.721 639.742 479.721 767.742 479.721C835.742 461.388 1000.34 424.721 1114.74 424.721C1257.74 424.721 1349.24 479.221 1421.24 465.721C1493.24 452.221 1440.74 435.721 1453.24 450.721" stroke="#C3E3F4" stroke-width="82" stroke-linecap="round"/>
+      <path d="M30.935 363.388C4.81698 310.616 12.2282 245.917 22.4109 186.73C30.1539 141.724 11.9512 56.273 2.78442 17.9102C-0.103859 5.82287 -2.0951 -1.58978 -2.0951 -1.58978L-2.59074 588.91L1423.43 583.91C1423.43 583.91 1464.71 406.586 1345.8 416.661C1276.85 422.518 1211.67 466.297 1142.89 458.635C1063.57 449.838 992.81 373.72 914.787 391.81C849.86 406.852 806.563 483.39 741.069 495.172C668.581 508.222 598.465 440.113 528.582 414.975C443.038 384.239 351.727 422.589 263.672 442.581C175.614 462.517 74.1686 450.849 30.935 363.388Z" fill="#FFE3E6"/>
+      </g>
+    </svg> {% endcomment %}
+    {%- assign image = section.settings.divider_image -%}
+    <img
+      srcset="
+        {%- if image.width >= 375 -%}{{ image | image_url: width: 375 }} 375w,{%- endif -%}
+        {%- if image.width >= 750 -%}{{ image | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if image.width >= 1100 -%}{{ image | image_url: width: 1100 }} 1100w,{%- endif -%}
+        {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {%- if image.width >= 1780 -%}{{ image | image_url: width: 1780 }} 1780w,{%- endif -%}
+        {%- if image.width >= 2000 -%}{{ image | image_url: width: 2000 }} 2000w,{%- endif -%}
+        {%- if image.width >= 3000 -%}{{ image | image_url: width: 3000 }} 3000w,{%- endif -%}
+        {%- if image.width >= 3840 -%}{{ image | image_url: width: 3840 }} 3840w,{%- endif -%}
+        {{ image | image_url }} {{ image.width }}w
+      "
+      src="{{ image | image_url: width: 1500 }}"
+      sizes="100vw"
+      alt="{{ image.alt | escape }}"
+      loading="lazy"
+      width="{{ image.width }}"
+      height="{{ image.height }}"
+      class="image-divider__image"
+    >
+  </div>
+</div>
+<div class="its-slider-main-wrapper">
+<section class="its-slider-section page-width">
+  <div class="its-text">
+    <span class="h1">{{ section.settings.its_heading }}</span>
+    <span class="typeset1">{{ section.settings.its_desc }}</span>
+  </div>
+
+  <div class="swiper its-swiper">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide its-slide">
+          <div class="its-slide-inner">
+            <!-- Left side -->
+            <div class="its-left typeset2">
+              {% if block.settings.icon %}
+                <img src="{{ block.settings.icon | image_url: width: 100 }}" alt="Icon" class="its-icon">
+              {% endif %}
+              {% if block.settings.text %}
+                <p class="its-text">{{ block.settings.text }}</p>
+              {% endif %}
+              {% if block.settings.name %}
+                <p class="its-name">— {{ block.settings.name }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Right side -->
+            <div class="its-right">
+              {% if block.settings.image %}
+                <img src="{{ block.settings.image | image_url: width: 800 }}" alt="Review Image" class="its-image">
+              {% endif %}
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="swiper-button-prev its-prev small-hide medium-hide">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <!--!Font Awesome Pro v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2025 Fonticons, Inc.--><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 288 480 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-370.7 0 105.4-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+              </svg>
+            </div>
+            <div class="swiper-button-next its-next small-hide medium-hide">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l370.7 0-105.4 105.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+           <!-- Pagination bullets -->
+            <div class="swiper-pagination its-pagination large-up-hide"></div>
+  </div>
+</section>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+  new Swiper('.its-swiper', {
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: true,
+    },
+    navigation: {
+      nextEl: '.its-next',
+      prevEl: '.its-prev',
+    },
+    pagination: {
+      el: '.its-pagination',
+      clickable: true,
+    },
+  });
+});
+
+</script>
+
+{% schema %}
+{
+  "name": "Image Text Slider",
+  "settings": [
+     {
+      "type": "image_picker",
+      "id": "divider_image",
+      "label": "Top Image Image",
+      "info": "Use a PNG with a transparent background for the best effect. Recommended width: 1920px."
+    },
+    {
+      "type": "range",
+      "id": "vertical_offset",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Vertical overlap",
+      "default": 25,
+      "info": "How much the divider should overlap the sections above and below it. Increases the negative margin."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "its_heading",
+      "label": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "its_desc",
+      "label": "Description"
+    },
+
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color",
+      "id": "its_bg",
+      "label": "Background Color"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.header.content"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "t:sections.all.padding.padding_top.unit",
+      "label": "t:sections.all.padding.padding_top.label",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "t:sections.all.padding.padding_bottom.unit",
+      "label": "t:sections.all.padding.padding_bottom.label",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon Image"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review Text",
+          "default": "This is a sample review text."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Reviewer Name",
+          "default": "— Jane Doe"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Right Side Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Text Slider",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "review"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

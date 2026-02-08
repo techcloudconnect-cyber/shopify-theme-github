@@ -1,0 +1,138 @@
+.image-text-icon-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap:2rem;
+}
+
+.image-text-icon-media {
+  position: relative;
+  flex:1;
+}
+
+.image-text-icon-image img {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+}
+.global-media-settings iframe{
+  border-radius: 0;
+}
+
+.image-text-icon-content {
+    margin: 1rem 2rem ;
+    max-width: 60rem;
+  flex:1;
+    /* padding: 4rem; edited */
+}
+
+.image-text-icon-subheading {
+  color: rgba(var(--color-button),var(--alpha-button-background));
+  font-size: 14px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.image-text-icon-text  p{
+ margin: 0; 
+}
+
+.feature-item {
+  position:relative;
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  align-items: flex-start;
+}
+.image-text-icon-media>* {
+  margin: 1.5rem 0;
+}
+
+.feature-content a{
+  text-decoration: none;
+  color: rgba(var(--color-foreground));
+}
+
+  .icon-image {
+    width: 50px;
+    height: 50px;
+  }
+  
+.icon-image img{
+  width:100%;
+  height:100%;
+  vertical-align: middle;
+}
+
+.feature-heading {
+  margin: 0 0 8px 0;
+}
+
+.feature-text {
+  margin: 0;
+}
+
+.iti_button_wrapper {
+    display: flex;
+    justify-content: center;
+}
+.feature-item:after {
+    content: "";
+    position: absolute;
+    left: 25px;
+    top: 2px;
+    width: 2px;
+    height: calc(100% + 1.5rem);
+    background-color: #003;
+    z-index: -1;
+}
+.feature-item:last-child::after {
+  display: none;
+}
+.feature-icon {
+    flex-shrink: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .image-text-icon-content.image-text-icon-content-cstm {
+    margin: 1rem 10rem 1rem 2rem;
+    max-width: 52.1rem;
+  }
+}
+@media screen and (max-width: 990px) {
+
+  .feature-heading{
+    font-size: 2rem;
+  }
+
+  .image-text-icon-content{
+    margin:0;
+  }
+
+  
+  /* .image-text-icon-heading {
+    font-size: 28px;
+  } */
+  
+  .reviews-card {
+    position: absolute;
+    bottom:0%;
+  }
+  .image-text-icon-image {
+    max-width: 50rem;
+    margin: auto;
+}
+
+  .feature-item {
+    margin: 1rem 0;
+  }
+}
+@media screen and (max-width: 750px) {
+  .image-text-icon-grid {
+    /* edited grid-template-columns: 1fr;   */
+    flex-direction: column;
+  }
+  .image-text-icon-media {
+    width: 100%;
+  }
+}  

@@ -1,0 +1,412 @@
+{{ 'section-multicolumn-v1.css' | asset_url | stylesheet_tag: preload: true }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    position: relative;
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --image-position: {{ section.settings.image_position }};
+    --gradient-background: {% if section.settings.gradient_background != blank %}{{ section.settings.gradient_background }}{% else %}{{ section.settings.colors_background }}{% endif %};
+    --color-background: {{ section.settings.colors_background.red }}, {{ section.settings.colors_background.green }}, {{ section.settings.colors_background.blue }};
+    --color-foreground: {{ section.settings.colors_text.red }}, {{ section.settings.colors_text.green }}, {{ section.settings.colors_text.blue }};
+    --color-link: var(--color-foreground);
+    --color-border: var(--color-foreground);
+    --color-heading: var(--color-foreground);
+    --color-button-background: {{ section.settings.colors_button_background.red }}, {{ section.settings.colors_button_background.green }}, {{ section.settings.colors_button_background.blue }};
+    --color-button-text: {{ section.settings.colors_button_label.red }}, {{ section.settings.colors_button_label.green }}, {{ section.settings.colors_button_label.blue }};
+    --color-button-border: var(--color-button-background);
+    background: var(--gradient-background);
+    background-color: rgb(var(--color-background));
+    --card--color: {{section.settings.card_colors_text.red}},{{section.settings.card_colors_text.green}},{{section.settings.card_colors_text.blue}};
+    --card--background: {{section.settings.card_colors_background.red}},{{section.settings.card_colors_background.green}},{{section.settings.card_colors_background.blue}};
+  }
+
+  /* Additional inline styles to ensure equal height */
+  #shopify-section-{{ section.id }} .multicolumn-v1__swiper .swiper-wrapper {
+    align-items: stretch !important;
+  }
+
+  #shopify-section-{{ section.id }} .multicolumn-v1__slide {
+    height: auto !important;
+    display: flex !important;
+  }
+
+  #shopify-section-{{ section.id }} .multicolumn-v1__card {
+    height: 100% !important;
+    min-height: 450px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .multicolumn-v1__content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 2.5rem !important;
+    position: relative;
+    z-index: 2;
+  }
+
+  #shopify-section-{{ section.id }} .multicolumn-v1__description {
+    margin-bottom: 1.5rem !important;
+    line-height: 1.5 !important;
+    flex-grow: 1 !important;
+  }
+
+  #shopify-section-{{ section.id }} .multicolumn-v1__button {
+    margin-top: auto !important;
+    align-self: flex-start !important;
+    border-radius: 100px;
+  }
+
+  #shopify-section-{{ section.id }} .multicolumnv1-image {
+    position: absolute !important;
+    bottom: -10px !important;
+    right: 0 !important;
+    max-width: 30rem !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+  }
+{% endstyle %}
+
+<div class="multicolumn-v1">
+  <div class="multicolumn-v1__container page-width">
+    {% if section.settings.heading != blank %}
+      <span class="multicolumn-v1__heading h1">{{ section.settings.heading }}</span>
+    {% endif %}
+
+    <div class="multicolumn-v1__swiper swiper" data-section-id="{{ section.id }}">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          <div class="swiper-slide multicolumn-v1__slide" {{ block.shopify_attributes }}>
+            <div class="multicolumn-v1__card">
+              <div class="multicolumn-v1__content">
+                {% if block.settings.subtitle != blank %}
+                  <h3 class="multicolumn-v1__subtitle">{{ block.settings.subtitle }}</h3>
+                {% endif %}
+
+                {% if block.settings.description != blank %}
+                  <span class="multicolumn-v1__description">{{ block.settings.description }}</span>
+                {% endif %}
+
+                {% if block.settings.button_text != blank and block.settings.button_url != blank %}
+                  <a
+                    href="{{ block.settings.button_url }}"
+                    class="button-arrow button button--medium multicolumn-v1__button"
+                  >
+                    {{ block.settings.button_text }}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                      width="21"
+                      height="21"
+                      viewBox="0 0 21 21"
+                      fill="none"
+                    >
+                      <rect width="21" height="21" fill="url(#pattern0_83_1555)"/>
+                      <defs>
+                      <pattern id="pattern0_83_1555" patternContentUnits="objectBoundingBox" width="1" height="1">
+                      <use xlink:href="#image0_83_1555" transform="scale(0.0232558)"/>
+                      </pattern>
+                      <image id="image0_83_1555" width="43" height="43" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAArCAYAAADhXXHAAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAD5SURBVHgB7dfRDYIwEMbxq3EARugIjuAGroAbsIE6gSOwAhvgBoyAG+gG59fgg0IrPFC4xvslF5M+mL9N1UKklFIqOcxsMTWmwZxIsnfoJ7nBiGt5SGYwwgr2Ext81uCYfhyJK0mEsDwQXJJEGhzb3wSbwJtleNlRXAdM4VmvMEdjzJPGcHcJaXldta9t41lzO2ppXXsE2/6iL3Z8+5cx6Nj2F3BWbvhUF+rOVEZx2cD6tDO7FGxIGTivOUmioXNLIhQxWUqhjSfygYn9Lzmdhs4tmVAn8GWSF+rw8NYmM9Th70dwF25pBoYi4e73012EKlxK7qSUku0F2skMrndWbsQAAAAASUVORK5CYII="/>
+                      </defs>
+                    </svg>
+                  </a>
+                {% endif %}
+              </div>
+
+              {% if block.settings.image != blank %}
+                <div class="multicolumnv1-image">
+                  <img
+                    src="{{ block.settings.image | image_url: width: 1500 }}"
+                    alt="{{ block.settings.image.alt | default: block.settings.subtitle }}"
+                    class="multicolumn-v1__image"
+                    loading="lazy"
+                    width="350"
+                    height="350"
+                  >
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Navigation -->
+      <div class="nav_wrapper small-hide medium-hide">
+        <div class="multicolumn-v1__nav-prev swiper-button-prev">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <rect width="40" height="40" rx="20" fill="#DDDEF3"/>
+            <g clip-path="url(#clip0_83_1584)">
+            <g clip-path="url(#clip1_83_1584)">
+            <path d="M27 20.0001H13M27 20.0001L20.875 14M27 20.0001L20.875 26" stroke="#0E0E0F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            </g>
+            <defs>
+            <clipPath id="clip0_83_1584">
+            <rect width="20" height="20" fill="white" transform="translate(10 10)"/>
+            </clipPath>
+            <clipPath id="clip1_83_1584">
+            <rect width="20" height="20" fill="white" transform="translate(10 10)"/>
+            </clipPath>
+            </defs>
+          </svg>
+        </div>
+        <div class="multicolumn-v1__nav-next swiper-button-next">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <rect width="40" height="40" rx="20" fill="#DDDEF3"/>
+            <g clip-path="url(#clip0_83_1584)">
+            <g clip-path="url(#clip1_83_1584)">
+            <path d="M27 20.0001H13M27 20.0001L20.875 14M27 20.0001L20.875 26" stroke="#0E0E0F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            </g>
+            <defs>
+            <clipPath id="clip0_83_1584">
+            <rect width="20" height="20" fill="white" transform="translate(10 10)"/>
+            </clipPath>
+            <clipPath id="clip1_83_1584">
+            <rect width="20" height="20" fill="white" transform="translate(10 10)"/>
+            </clipPath>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="multicolumn-v1__pagination swiper-pagination"></div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const swiperEl = document.querySelector('[data-section-id="{{ section.id }}"]');
+
+    if (swiperEl && typeof Swiper !== 'undefined') {
+      new Swiper(swiperEl, {
+        slidesPerView: 1.2,
+        centeredSlides: true,
+        spaceBetween: 10,
+        loop: false,
+        autoHeight: false,
+
+        breakpoints: {
+          749: {
+            slidesPerView: 2,
+            centeredSlides: false,
+            spaceBetween: 20,
+          },
+          990: {
+            slidesPerView: 3,
+            centeredSlides: false,
+            spaceBetween: 20,
+          },
+        },
+
+        // Navigation
+        navigation: {
+          nextEl: '.multicolumn-v1__nav-next',
+          prevEl: '.multicolumn-v1__nav-prev',
+        },
+
+        // Pagination
+        pagination: {
+          el: '.multicolumn-v1__pagination',
+          clickable: true,
+        },
+
+        on: {
+          init: function () {
+            const slides = this.slides;
+            let maxHeight = 0;
+
+            slides.forEach((slide) => {
+              const card = slide.querySelector('.multicolumn-v1__card');
+              if (card) {
+                const height = card.offsetHeight;
+                if (height > maxHeight) {
+                  maxHeight = height;
+                }
+              }
+            });
+          },
+          resize: function () {
+            this.update();
+          },
+        },
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Multi Column V1",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Care that adapts to you"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "colors_background",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_background",
+      "id": "gradient_background",
+      "label": "Gradient background"
+    },
+    {
+      "type": "color",
+      "id": "colors_text",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "colors_button_label",
+      "label": "t:sections.all.colors.colors_button_label.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "colors_button_background",
+      "label": "t:sections.all.colors.colors_button_background.label",
+      "default": "#1a1b18"
+    },
+    {
+      "type": "color",
+      "id": "card_colors_background",
+      "label": "Card background color",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color",
+      "id": "card_colors_text",
+      "label": "Card text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "right",
+      "label": "Image position"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Multi Column V1",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "subtitle": "GLP-1 Care",
+            "button_text": "Start Your Visit"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "subtitle": "NAD+ Therapy",
+            "button_text": "Start Your Visit"
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "subtitle": "Lab Panels",
+            "button_text": "Start Your Visit"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

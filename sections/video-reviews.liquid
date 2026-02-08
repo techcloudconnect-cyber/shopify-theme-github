@@ -1,0 +1,605 @@
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --gradient-background: {% if section.settings.gradient_background != blank %}{{ section.settings.gradient_background }}{% else %}{{ section.settings.colors_background }}{% endif %};
+    --color-background: {{ section.settings.colors_background.red }}, {{ section.settings.colors_background.green }}, {{ section.settings.colors_background.blue }};
+    --color-foreground: {{ section.settings.colors_text.red }}, {{ section.settings.colors_text.green }}, {{ section.settings.colors_text.blue }};
+    --color-link: {{ section.settings.colors_link.red }}, {{ section.settings.colors_link.green }}, {{ section.settings.colors_link.blue }};
+    --color-border: {{ section.settings.colors_border.red }}, {{ section.settings.colors_border.green }}, {{ section.settings.colors_border.blue }};
+    --color-heading: {{ section.settings.colors_heading.red }}, {{ section.settings.colors_heading.green }}, {{ section.settings.colors_heading.blue }};
+    --color-highlight: {{ section.settings.colors_highlight.red }}, {{ section.settings.colors_highlight.green }}, {{ section.settings.colors_highlight.blue }};
+  }
+    .video--reviews strong{
+      font-weight:600;
+      color: {{ section.settings.stcolor }} !important;
+    }
+    .vrwidth{
+      max-width:190rem;
+      margin:0 auto;
+      /* padding-left:5rem edited */
+    }
+    {% if section.settings.bg_vector %}
+    .bg-vector {
+      background-image: url(https://cdn.shopify.com/s/files/1/0931/3006/4235/files/videoafter_6ac7dd1e-45b2-472f-ad0f-16b0577f0880.svg?v=1756117046);
+      background-size: 100%;
+      background-repeat: repeat-x;
+      height: 100px;
+      width: 100%;
+      position: absolute;
+      top: -6%;
+      transform: translateY(6%);
+      {% endif %}
+  }
+    #shopify-section-{{ section.id }} {
+      --color-background: {{section.settings.colors_background.red}},{{section.settings.colors_background.green}},{{section.settings.colors_background.blue}};
+      --gradient-background: {% if section.settings.gradient_background != blank %}{{ section.settings.gradient_background }}{% else %}{{ section.settings.colors_background }}{% endif %};
+      background: var(--gradient-background);
+      background-color: rgb(var(--color-background));
+      --color-foreground: {{section.settings.color_text.red}},{{section.settings.color_text.green}},{{section.settings.color_text.blue}};
+      --color-link: var(--color-foreground);
+      --color-border: var(--color-foreground);
+      --color-heading: var(--color-foreground);
+      --color-video-border: {{section.settings.video_border.red}},{{section.settings.video_border.green}},{{section.settings.video_border.blue}};
+    }
+
+     #shopify-section-{{ section.id }} .section--padding{
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+
+
+      .video-reviews-pagination{
+          display:none;
+      }
+
+    {% if section.settings.enable_border %}
+    #shopify-section-{{ section.id }} .video--reviews--video video {
+      border: 0.3rem solid rgb(var(--color-video-border));
+    }
+    {% endif %}
+    #shopify-section-{{ section.id }} .video--reviews--video video{
+      border-radius: {{section.settings.image_radius}}px;
+    }
+    @media screen and (max-width: 749px){
+      #shopify-section-{{ section.id }} .section--padding{
+        padding-top: {{section.settings.mob_padding_top}}px;
+        padding-bottom: {{section.settings.mob_padding_bottom}}px;
+      }
+      #shopify-section-{{ section.id }} {
+        border-radius: {{section.settings.mob_image_radius}}px;
+      }
+      .vrwidth{
+      padding-left:1.5rem
+    }
+    }
+    #shopify-section-{{ section.id }} .title-wrapper .title{
+      max-width: {{section.settings.max_width}}px;
+    }
+    #shopify-section-{{ section.id }} .video--reviews--video{
+      height: {{section.settings.video_height}}px;
+      min-height: {{section.settings.video_height}}px;
+      max-height: {{section.settings.video_height}}px;
+    }
+    @media screen and (max-width: 749px){
+      #shopify-section-{{ section.id }} .video--reviews--video{
+        height: {{section.settings.video_mob_height}}px;
+        min-height: {{section.settings.video_mob_height}}px;
+      }
+    }
+{%- endstyle -%}
+{{ 'video-reviews.css' | asset_url | stylesheet_tag: preload: true }}
+
+<div class="video--reviews section--padding">
+  {% if section.settings.bg_vector %}
+    <div class="bg-vector">&nbsp</div>
+  {% endif %}
+
+  <div class="{% if section.settings.enable_pagewidth %}page-width{% else %}vrwidth{% endif %}">
+    <div class="section--header--wrapper">
+      <div class="title-wrapper{% if section.settings.heading == blank %} title-wrapper--no-heading{% endif %} {{ section.settings.heading_alignment }}">
+        <{{ section.settings.heading_tag }} class="title {{ section.settings.heading_size }}">
+          {{- section.settings.heading -}}
+        </{{ section.settings.heading_tag }}>
+      </div>
+      {% if section.settings.text != blank %}
+        <div class="header--text video--reviews--text {{ section.settings.text_size }} rte {{ section.settings.heading_alignment }}">
+          {{ section.settings.text }}
+        </div>
+      {% endif %}
+    </div>
+    {% if section.blocks.size > 0 %}
+      <div class="video--reviews-wrapper{% if section.settings.make_slider %} video--review--slider swiper{% endif %}">
+        <div class="video--reviews-main{% if section.settings.make_slider %} swiper-wrapper{% else %} grid grid--1-col-mobile grid--2-col grid--3-col-tablet grid--5-col-desktop{% endif %}">
+          {% for block in section.blocks %}
+            {% if block.settings.video != blank %}
+              <div class="video--reviews-box{% if section.settings.make_slider %} swiper-slide{% else %} grid__item{% endif %}">
+                <div class="video--reviews--video" videoWrapper>
+                  <video
+                    width="250"
+                    playsinline
+                    {% if block.settings.poster != blank %}
+                      poster="{{ block.settings.poster | image_url: width: 1500 }}"
+                    {% endif %}
+                  >
+                    {% for source in block.settings.video.sources %}
+                      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                    {% endfor %}
+                  </video>
+                  <span class="spinner"></span>
+                  <img
+                    alt="play-icon"
+                    class="video--play-icon"
+                    playTrigger
+                    src="https://cdn.shopify.com/s/files/1/0627/0572/9595/files/playicon.svg?v=1756978040"
+                    width="40"
+                    height="40"
+                    loading="lazy"
+                  >
+                  {% comment %}
+                    mute button hidden <button class="mute-toggle" aria-label="Toggle mute" type="button">
+                      <span class="icon-mute">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M8.35419 2.068C8.50251 2.138 8.62859 2.24766 8.71847 2.38484C8.80836 2.52203 8.85856 2.6814 8.86353 2.84533V13.1307C8.86353 13.4787 8.64886 13.7733 8.35553 13.9333C8.20066 14.0008 8.02949 14.0215 7.863 13.9931C7.69651 13.9647 7.54192 13.8883 7.41819 13.7733L3.79953 10.5573H2.00486C1.77884 10.5604 1.55451 10.5181 1.3451 10.433C1.13569 10.3479 0.945447 10.2217 0.785614 10.0619C0.625782 9.90208 0.499594 9.71184 0.414504 9.50243C0.329413 9.29302 0.287144 9.06868 0.290193 8.84266V7.128C0.290193 6.19067 1.03953 5.41333 2.00486 5.41333H3.79953L7.41686 2.228C7.54059 2.11302 7.69517 2.03665 7.86167 2.00823C8.02816 1.97981 8.19933 2.00058 8.35419 2.068ZM11.6769 5.60267L13.1502 7.07733L14.6235 5.60267C14.8635 5.36267 15.2675 5.36267 15.5075 5.60267C15.7755 5.87067 15.7755 6.272 15.5075 6.51333L14.0342 7.988L15.5089 9.46C15.7769 9.728 15.7769 10.1293 15.5089 10.3707C15.4538 10.4338 15.3859 10.4843 15.3096 10.519C15.2334 10.5536 15.1506 10.5716 15.0669 10.5716C14.9831 10.5716 14.9003 10.5536 14.8241 10.519C14.7479 10.4843 14.6799 10.4338 14.6249 10.3707L13.1502 8.89733L11.6782 10.372C11.4102 10.64 11.0089 10.64 10.7675 10.372C10.4995 10.1293 10.4995 9.728 10.7675 9.46L12.2409 7.98666L10.7635 6.51467C10.4969 6.27467 10.4969 5.872 10.7635 5.604C11.0062 5.364 11.4075 5.364 11.6755 5.604L11.6769 5.60267Z" fill="white"/>
+                        </svg>
+                      </span>
+                    </button>
+                  {% endcomment %}
+                </div>
+                {% if block.settings.text != blank %}
+                  <div class="video--reviews__description typeset0">
+                    {{ block.settings.text }}
+                    <img src="https://cdn.shopify.com/s/files/1/0627/0572/9595/files/tickwhite.svg?v=1756978561">
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if section.settings.make_slider %}
+          <div class="video-reviews-pagination swiper-pagination"><div class="visually-hidden"></div></div>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="video-disclaimer">{{ section.settings.vid_disc }}</div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener("DOMContentLoaded",function(){
+
+    /******VIDEO REVIEWS SLIDER*******/
+    const videoReviewSlider = new Swiper("#shopify-section-{{ section.id }} .video--review--slider",{
+       loop: true,
+       spaceBetween: 20,
+       speed: 1000,
+       autoplay: {
+       delay: 3000,
+      disableOnInteraction: true
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 1.25,
+          centeredSlides: true,
+          spaceBetween: 10,
+        },
+        480: {
+          slidesPerView: 1.25,
+          centeredSlides: true,
+          spaceBetween: 10,
+        },
+        749: {
+          slidesPerView: 3,
+          centeredSlides: false,
+          spaceBetween: 20
+        },
+        1024: {
+          slidesPerView: {{ section.settings.slides_per_view }},
+          centeredSlides: false,
+          spaceBetween: 20,
+          loop: true,
+        }
+      },
+      navigation: {
+        nextEl: "#shopify-section-{{ section.id }} .swiper-button-next",
+        prevEl: "#shopify-section-{{ section.id }} .swiper-button-prev",
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      },
+    })
+
+    /******VIDEO PLAYING FUNCTIONALITY*****/
+
+    const playTrigger = document.querySelectorAll("[playTrigger]");
+    if(playTrigger.length > 0){
+      playTrigger.forEach(function(e){
+      e.addEventListener("click", function(){
+        const videoWrapper = this.closest("[videoWrapper]");
+        const videoBox = this.closest(".video--reviews-box");
+
+        // Play video
+        videoWrapper.querySelector("video").play();
+        this.classList.add("hidden");
+
+        // Remove scale from all boxes
+        document.querySelectorAll(".video--reviews-box.clicked-scale").forEach(function(box){
+          box.classList.remove("clicked-scale");
+        });
+
+        // Add scale to the current box
+        videoBox.classList.add("clicked-scale");
+      });
+    });
+
+    }
+
+    const videoTriggers = document.querySelectorAll("[videoWrapper] video");
+    if(videoTriggers.length > 0){
+      videoTriggers.forEach(function(e){
+        e.addEventListener("click",function(){
+          if(!this.paused || !this.ended){
+            this.pause();
+            this.closest("[videoWrapper]").querySelector("[playTrigger]").classList.remove("hidden");
+          }
+        })
+        e.addEventListener("ended",function(){
+            this.closest("[videoWrapper]").querySelector("[playTrigger]").classList.remove("hidden");
+            this.load();
+        })
+      })
+    }
+
+  })
+</script>
+
+{% comment %}
+  Mute Un Mute Functionality
+  <script>
+    document.querySelectorAll('.video--reviews--video').forEach(function (wrapper) {
+      const video = wrapper.querySelector('video');
+      const toggleBtn = wrapper.querySelector('.mute-toggle');
+
+      if (video && toggleBtn) {
+        // Initial mute
+        video.muted = true;
+        toggleBtn.classList.remove('unmuted');
+
+        toggleBtn.addEventListener('click', function () {
+          video.muted = !video.muted;
+          toggleBtn.classList.toggle('unmuted', !video.muted);
+        });
+      }
+    });
+  </script>
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Video reviews",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_pagewidth",
+      "label": "Enable Page Width",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "bg_vector",
+      "label": "Show Background Vector"
+    },
+    {
+      "type": "checkbox",
+      "id": "make_slider",
+      "label": "Make Slider",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "label": "Slides per view on desktop",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "video_height",
+      "min": 250,
+      "max": 500,
+      "step": 5,
+      "label": "Video height",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "video_mob_height",
+      "min": 250,
+      "max": 500,
+      "step": 5,
+      "label": "Mobile video height",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Image radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mob_image_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile image radius",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_border",
+      "label": "Enable border around videos",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "color",
+      "id": "stcolor",
+      "label": "Select Second Color"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "h2"
+        },
+        {
+          "value": "h1",
+          "label": "h1"
+        },
+        {
+          "value": "h0",
+          "label": "h0"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading Size"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "left"
+        },
+        {
+          "value": "center",
+          "label": "center"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "options": [
+        {
+          "value": "h1",
+          "label": "h1"
+        },
+        {
+          "value": "h2",
+          "label": "h2"
+        },
+        {
+          "value": "h3",
+          "label": "h3"
+        },
+        {
+          "value": "h4",
+          "label": "h4"
+        },
+        {
+          "value": "h5",
+          "label": "h5"
+        },
+        {
+          "value": "h6",
+          "label": "h6"
+        },
+        {
+          "value": "div",
+          "label": "div"
+        },
+        {
+          "value": "span",
+          "label": "span"
+        },
+        {
+          "value": "p",
+          "label": "p"
+        }
+      ],
+      "default": "h2",
+      "label": "Heading tag"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 500,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Heading max width",
+      "default": 1600
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "options": [
+        {
+          "value": "typeset",
+          "label": "typeset"
+        },
+        {
+          "value": "typeset2",
+          "label": "typeset2"
+        },
+        {
+          "value": "typeset3",
+          "label": "typeset3"
+        }
+      ],
+      "default": "typeset2",
+      "label": "Description size"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "vid_disc",
+      "label": "Disclaimer"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.colors.header.content"
+    },
+    {
+      "type": "color",
+      "id": "colors_text",
+      "label": "t:sections.all.colors.colors_text.label",
+      "default": "#42474c"
+    },
+    {
+      "type": "color",
+      "id": "colors_heading",
+      "label": "t:sections.all.colors.colors_heading.label",
+      "default": "#6b7177"
+    },
+    {
+      "type": "color",
+      "id": "colors_link",
+      "label": "t:sections.all.colors.colors_link.label",
+      "default": "#212326"
+    },
+    {
+      "type": "color",
+      "id": "colors_border",
+      "label": "t:sections.all.colors.colors_line.label",
+      "default": "#d2d5d9"
+    },
+    {
+      "type": "color",
+      "id": "colors_background",
+      "label": "t:sections.all.colors.colors_background.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_background",
+      "id": "gradient_background",
+      "label": "t:sections.all.colors.gradient_background.label"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "mob_padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "mob_padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_reviews",
+      "name": "Video reviews",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "video"
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Video optional poster"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video reviews"
+    }
+  ]
+}
+{% endschema %}

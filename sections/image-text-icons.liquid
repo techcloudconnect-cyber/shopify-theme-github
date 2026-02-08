@@ -1,0 +1,364 @@
+{{ 'section-image-text-icons.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --color-heading: var(--color-foreground);
+    --color-button-background: {{ section.settings.colors_button_background.red }}, {{ section.settings.colors_button_background.green }}, {{ section.settings.colors_button_background.blue }};
+    --color-button-text: {{ section.settings.colors_button_label.red }}, {{ section.settings.colors_button_label.green }}, {{ section.settings.colors_button_label.blue }};
+    --color-button-border: var(--color-button-background);
+  }
+    .section-{{ section.id }}-padding {
+      /* edited padding-top: {{ section.image-text-icon-text.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px; */
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0  }}px;
+      margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+      background-color:{{section.settings.bg_color }};
+      color:{{section.settings.text_color }};
+    }
+
+     @media screen and (min-width: 990px) {
+       .section-{{ section.id }}-padding .image-text-icon-grid {
+          flex-direction:{{section.settings.image_position}};
+        }
+     }
+     @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+        margin-top: {{ section.settings.margin_top }}px;
+        margin-bottom: {{ section.settings.margin_bottom }}px;
+      }
+    }
+{% endstyle %}
+
+<div class="image-text-icon-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div
+    {% if section.settings.enable_narrow %}
+      class="page-width"
+    {% endif %}
+  >
+    <div class="image-text-icon-grid">
+      <!-- Left Column - Image -->
+      <div class="image-text-icon-media">
+        {% if section.settings.image != blank %}
+        {% endif %}
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'heading' %}
+              {% if block.settings.sub_heading != blank %}
+                <p class="image-text-icon-subheading">{{ block.settings.sub_heading }}</p>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <h2 class="image-text-icon-heading h1">{{ block.settings.heading }}</h2>
+              {% endif %}
+              {% if block.settings.paragraph != blank %}
+                <div class="image-text-icon-text ">
+                  {{ block.settings.paragraph }}
+                </div>
+              {% endif %}
+              {% if block.settings.paragraph != blank %}
+                <a href="{{block.settings.feature_btn }}" class="button button-primary full-unstyled-link">
+                  {{- block.settings.feature_btn_text -}}
+                </a>
+              {% endif %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+
+      <!-- Right Column - Content -->
+      <div class="image-text-icon-content {% if section.settings.enable_custom_padding_width %} image-text-icon-content-cstm {% endif %} ">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'feature' %}
+              <div class="feature-{{ block.id }} feature-item" {{ block.shopify_attributes }}>
+                <div class="feature-icon">
+                  {% if block.settings.icon != blank %}
+                    <div class="icon-image">{{ block.settings.icon | image_url: width: 1500 | image_tag }}</div>
+                  {% endif %}
+                </div>
+                <div class="feature-content">
+                  {% if block.settings.feature_heading != blank %}
+                    <h3 class="feature-heading {{ block.settings.feature_heading_size }}">
+                      {{ block.settings.feature_heading }}
+                    </h3>
+                  {% endif %}
+                  {% if block.settings.feature_text != blank %}
+                    <p class="feature-text light typeset3">{{ block.settings.feature_text }}</p>
+                  {% endif %}
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+    {% if section.settings.scroll_to_sec and section.settings.section_id %}
+      <div class="page-width iti_button_wrapper">
+        <a
+          {% if section.settings.button_text == blank %}
+            role="link" aria-disabled="true"
+          {% else %}
+            href="#{{ section.settings.section_id }}"
+          {% endif %}
+          class="scroll-to-section-ti full_width-button button button--primary"
+          {{ section.shopify_attributes }}
+        >
+          {{ section.settings.button_text | escape }}
+        </a>
+      </div>
+    {% else %}
+      {% if section.settings.button_url != blank %}
+        <div class="page-width iti_button_wrapper">
+          <a class="full_width-button button button--primary" href="{{ section.settings.button_url }}">
+            {{- section.settings.button_text -}}
+          </a>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.scroll-to-section-ti').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href').substring(1);
+        const target = document.getElementById(targetId);
+
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Image Text Icons",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_narrow",
+      "label": "Enable Page Width",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_padding_width",
+      "label": "Enable Custom Padding and Width",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "color",
+      "id": "colors_button_label",
+      "label": "t:sections.all.colors.colors_button_label.label",
+      "default": "#1a1b18"
+    },
+    {
+      "type": "color",
+      "id": "colors_button_background",
+      "label": "t:sections.all.colors.colors_button_background.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "options": [
+        {
+          "value": "row",
+          "label": "Left"
+        },
+        {
+          "value": "row-reverse",
+          "label": "Right"
+        }
+      ],
+      "default": "row-reverse",
+      "label": "Content Position",
+      "info": "Only applicable on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_to_sec",
+      "label": "Scroll to section",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section Id"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Label",
+      "default": "Button"
+    },
+
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Margin"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "sub_heading",
+          "label": "Sub heading",
+          "default": "ABOUT US"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Find what's really causing symptoms"
+        },
+        {
+          "type": "richtext",
+          "id": "paragraph",
+          "label": "Paragraph",
+          "default": "<p>We're on a mission to make food sensitivity testing fast, accessible, and easy to understand — so you can feel better, faster.</p>"
+        },
+        {
+          "type": "url",
+          "id": "feature_btn",
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "feature_btn_text",
+          "label": "Label"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "feature_heading",
+          "label": "Feature heading",
+          "default": "Certified Lab Testing"
+        },
+        {
+          "type": "select",
+          "id": "feature_heading_size",
+          "options": [
+            {
+              "value": "h5",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h4",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h3",
+              "label": "t:sections.all.heading_size.options__3.label"
+            }
+          ],
+          "default": "h4",
+          "label": "t:sections.all.heading_size.label"
+        },
+        {
+          "type": "richtext",
+          "id": "feature_text",
+          "label": "Feature text",
+          "default": "<p>Expert medical professionals providing advanced, specialized care for every need.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_bottom_border",
+          "label": "Enable Bottom line",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Text Icons",
+      "blocks": [
+        {
+          "type": "heading"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

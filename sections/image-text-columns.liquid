@@ -1,0 +1,224 @@
+<section
+  class="itc-section"
+  style="background-color: {{ section.settings.background_color }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="page-width itc-wrapper">
+    <!-- Left Column -->
+    <div class="itc-column itc-column-left">
+      <div class="itc-image">
+        {% if section.settings.left_image %}
+          <img
+            src="{{ section.settings.left_image | img_url: '800x' }}"
+            alt="Left image"
+            loading="lazy"
+          >
+        {% endif %}
+      </div>
+      <div class="itc-content">
+        {% if section.settings.left_heading != blank %}
+          <div class="itc-heading">
+            {{ section.settings.left_heading }}
+          </div>
+        {% endif %}
+        {% if section.settings.left_description != blank %}
+          <div class="itc-description typeset0">
+            {{ section.settings.left_description }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="itc-column itc-column-right">
+      <div class="itc-image">
+        {% if section.settings.right_image %}
+          <img
+            src="{{ section.settings.right_image | img_url: '800x' }}"
+            alt="Right image"
+            loading="lazy"
+          >
+        {% endif %}
+      </div>
+      <div class="itc-content">
+        {% if section.settings.right_heading != blank %}
+          <div class="itc-heading">
+            {{ section.settings.right_heading }}
+          </div>
+        {% endif %}
+        {% if section.settings.right_description != blank %}
+          <div class="itc-description typeset0">
+            {{ section.settings.right_description }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.itc-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.itc-column-left {
+flex:1.1;
+}
+
+.itc-column-left .itc-image{
+max-width:25rem;
+}
+
+.itc-column-right .itc-image{
+max-width:10rem;
+}
+
+.itc-column-right {
+flex:0.9
+}
+
+.itc-column {
+  display: flex;
+  {% comment %} flex: 1 1 48%; edited {% endcomment %}
+  background: #fff;
+  border-radius: 20px;
+  padding:2rem 4rem 0;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.itc-image{
+flex:0.5;
+}
+
+.itc-image img {
+  width: 100%;
+  height: 100%;
+  {% comment %} max-width: 220px; edited {% endcomment %}
+  object-fit: contain;
+  vertical-align:bottom;
+}
+
+.itc-content {
+  flex: 0.8;
+}
+
+.itc-heading {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size:90px;
+  line-height:normal;
+}
+
+.itc-heading p {
+    margin: 0;
+}
+
+.itc-description p{
+    margin:0;
+}
+
+@media screen and (max-width: 768px) {
+  .itc-wrapper {
+    flex-direction: column;
+  }
+  .itc-column {
+    flex-direction: column;
+    text-align: center;
+    padding:2rem;
+  }
+  .itc-image img {
+    max-width: 180px;
+  }
+  
+  .itc-heading {
+    font-size:45px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Image Text Column",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 60,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 60,
+      "unit": "px"
+    },
+
+    {
+      "type": "header",
+      "content": "Left Column"
+    },
+    {
+      "type": "image_picker",
+      "id": "left_image",
+      "label": "Left image"
+    },
+    {
+      "type": "richtext",
+      "id": "left_heading",
+      "label": "Left heading",
+      "default": "<p>92%</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "left_description",
+      "label": "Left description",
+      "default": "<p>of members report improved confidence in managing their weight after starting treatment.</p>"
+    },
+
+    {
+      "type": "header",
+      "content": "Right Column"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right image"
+    },
+    {
+      "type": "richtext",
+      "id": "right_heading",
+      "label": "Right heading",
+      "default": "<p>88%</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "right_description",
+      "label": "Right description",
+      "default": "<p>feel more energized during daily training sessions.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Text Column"
+    }
+  ]
+}
+{% endschema %}
