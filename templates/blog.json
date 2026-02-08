@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -13,13 +22,11 @@
         },
         "summary": {
           "type": "summary",
-          "settings": {
-          }
+          "settings": {}
         },
         "read_more": {
           "type": "read_more",
-          "settings": {
-          }
+          "settings": {}
         }
       },
       "block_order": [
@@ -29,12 +36,12 @@
       ],
       "settings": {
         "per_page": 12,
-        "show_tag_filter": true,
+        "show_tag_filter": false,
         "show_image": true,
         "image_ratio": "landscape",
         "image_position": "center center",
         "padding_top": 60,
-        "padding_bottom": 72
+        "padding_bottom": 60
       }
     }
   },
